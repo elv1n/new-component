@@ -42,7 +42,8 @@ program
     config.type
   ).option(
     '-d, --dir <pathToDirectory>',
-    'Path to the component directory (default: current directory)'
+    'Path to the component directory (default: current directory)',
+    process.cwd()
   ).option(
     '-x, --extension <fileExtension>',
     'Which file extension to use for the component',
