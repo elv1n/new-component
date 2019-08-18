@@ -1,0 +1,28 @@
+{
+  "name": "@elv1n/nc",
+  "version": "1.0.0",
+  "description": "CLI for creating new React components",
+  "homepage": "https://github.com/elv1n/new-component",
+  "repository": "https://github.com/elv1n/new-component",
+  "bugs": {
+    "url": "https://github.com/elv1n/new-component/issues"
+  },
+  "main": "src/index.js",
+  "keywords": [
+    "react",
+    "reactjs",
+    "cli",
+    "component",
+    "boilerplate"
+  ],
+  "author": "Elvin Dzhavadov",
+  "license": "MIT",
+  "bin": {
+    "nc": "./src/index.js"
+  },
+  "dependencies": {
+    "chalk": "2.4.2",
+    "commander": "3.0.0",
+    "prettier": "1.18.2"
+  }
+}
