@@ -1,6 +1,6 @@
 {
   "name": "@elv1n/nc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI for creating new React components",
   "homepage": "https://github.com/elv1n/new-component",
   "repository": "https://github.com/elv1n/new-component",
