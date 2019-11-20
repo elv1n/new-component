@@ -50,7 +50,8 @@ program
     process.cwd()
   ).option(
     '-ts, --typescript',
-    'Which file extension to use for the component'
+    'Which file extension to use for the component',
+    config.typescript
   ).parse(process.argv);
 
 const [componentName] = program.args;
