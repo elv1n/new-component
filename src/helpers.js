@@ -30,8 +30,7 @@ module.exports.getConfig = () => {
 
   const defaults = {
     type: 'functional-with-props',
-    dir: currentPath,
-    extension: 'js'
+    dir: currentPath
   };
 
   const globalOverrides = requireOptional(`/${home}/.new-component-config.json`);
@@ -39,7 +38,7 @@ module.exports.getConfig = () => {
   const localOverrides = requireOptional(`/${currentPath}/.new-component-config.json`);
 
 
-  return Object.assign({}, globalOverrides, localOverrides, defaults);
+  return Object.assign({}, defaults, globalOverrides, localOverrides);
 }
 
 module.exports.buildPrettifier = prettierConfig => text => (
