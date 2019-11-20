@@ -1,0 +1,10 @@
+import React, { Component } from 'react';
+
+type Props = {};
+type State = {};
+
+export class COMPONENT_NAME extends Component<Props, Types> {
+  render() {
+    return <div />;
+  }
+}

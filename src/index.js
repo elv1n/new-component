@@ -31,6 +31,10 @@ const config = getConfig();
 // passed every time.
 const prettify = buildPrettifier(config.prettierConfig);
 
+const extraTypes = {
+  fn: 'functional',
+  fnp: 'functional-with-props'
+};
 
 program
   .version(version)
@@ -45,34 +49,44 @@ program
     'Path to the component directory (default: current directory)',
     process.cwd()
   ).option(
-    '-x, --extension <fileExtension>',
-    'Which file extension to use for the component',
-    config.extension
+    '-ts, --typescript',
+    'Which file extension to use for the component'
   ).parse(process.argv);
 
 const [componentName] = program.args;
 
+const type = extraTypes[program.type] || program.type;
+
+const indexExtension = program.typescript ? 'ts' : 'js';
+const componentExtension = program.typescript ? 'tsx' : 'js';
+
 // Find the path to the selected template file.
-const templatePath = `./templates/${program.type}.js`;
+const templatePath = program.typescript ? `./templates-ts/${type}.txt` : `./templates/${type}.txt`;
 
 // Get all of our file paths worked out, for the user's project.
 const componentDir = `${program.dir}/${componentName}`;
-const filePath = `${componentDir}/${componentName}.${program.extension}`;
-const indexPath = `${componentDir}/index.js`;
+const filePath = `${componentDir}/${componentName}.${componentExtension}`;
+const indexPath = `${componentDir}/index.${indexExtension}`;
+
+
+logIntro({ name: componentName, dir: componentDir, type });
+
+if (program.typescript && (type === 'pure-class' || type === 'functional-with-props')) {
+  logError(`Sorry, ${type} not available for typescript.`)
+  process.exit(0);
+}
+
+// Check if componentName is provided
+if (!componentName) {
+  logError(`Sorry, you need to specify a name for your component like this: nc <name>`)
+  process.exit(0);
+}
+
 
 // Our index template is super straightforward, so we'll just inline it for now.
 const indexTemplate = prettify(`\
 export { ${componentName} } from './${componentName}';
 `);
-
-logIntro({ name: componentName, dir: componentDir, type: program.type });
-
-
-// Check if componentName is provided
-if (!componentName) {
-  logError(`Sorry, you need to specify a name for your component like this: new-component <name>`)
-  process.exit(0);
-}
 
 // Check to see if a directory at the given path exists
 const fullPathToParentDir = path.resolve(program.dir);
@@ -90,9 +104,9 @@ if (fs.existsSync(fullPathToComponentDir)) {
 
 // Start by creating the directory that our component lives in.
 mkDirPromise(componentDir)
-  .then(() => (
-    readFilePromiseRelative(templatePath)
-  ))
+  .then(() => {
+    return readFilePromiseRelative(templatePath)
+  })
   .then(template => {
     logItemCompletion('Directory created.');
     return template;
@@ -103,7 +117,7 @@ mkDirPromise(componentDir)
   ))
   .then(template => (
     // Format it using prettier, to ensure style consistency, and write to file.
-    writeFilePromise(filePath, prettify(template))
+    writeFilePromise(filePath, template)
   ))
   .then(template => {
     logItemCompletion('Component built and saved to disk.');
@@ -111,7 +125,7 @@ mkDirPromise(componentDir)
   })
   .then(template => (
     // We also need the `index.js` file, which allows easy importing.
-    writeFilePromise(indexPath, prettify(indexTemplate))
+    writeFilePromise(indexPath, indexTemplate)
   ))
   .then(template => {
     logItemCompletion('Index file built and saved to disk.');
@@ -121,5 +135,6 @@ mkDirPromise(componentDir)
     logConclusion();
   })
   .catch(err => {
+    fs.rmdirSync(componentDir);
     console.error(err);
   })
