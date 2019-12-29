@@ -15,6 +15,9 @@
     "component",
     "boilerplate"
   ],
+  "files": [
+    "src", "README.md"
+  ],
   "author": "Elvin Dzhavadov",
   "license": "MIT",
   "bin": {
