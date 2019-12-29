@@ -1,6 +1,6 @@
 {
   "name": "@elv1n/nc",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "CLI for creating new React components",
   "homepage": "https://github.com/elv1n/new-component",
   "repository": "https://github.com/elv1n/new-component",
@@ -16,7 +16,8 @@
     "boilerplate"
   ],
   "files": [
-    "src", "README.md"
+    "src",
+    "README.md"
   ],
   "author": "Elvin Dzhavadov",
   "license": "MIT",
