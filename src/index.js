@@ -58,11 +58,13 @@ const [componentName] = program.args;
 
 const type = extraTypes[program.type] || program.type;
 
-const indexExtension = program.typescript ? 'ts' : 'js';
-const componentExtension = program.typescript ? 'tsx' : 'js';
+const isTS = program.typescript;
+
+const indexExtension = isTS ? 'ts' : 'js';
+const componentExtension = isTS ? 'tsx' : 'js';
 
 // Find the path to the selected template file.
-const templatePath = program.typescript ? `./templates-ts/${type}.txt` : `./templates/${type}.txt`;
+const templatePath = isTS ? `./templates-ts/${type}.txt` : `./templates/${type}.txt`;
 
 // Get all of our file paths worked out, for the user's project.
 const componentDir = `${program.dir}/${componentName}`;
@@ -72,7 +74,7 @@ const indexPath = `${componentDir}/index.${indexExtension}`;
 
 logIntro({ name: componentName, dir: componentDir, type });
 
-if (program.typescript && (type === 'pure-class' || type === 'functional-with-props')) {
+if (isTS && (type === 'pure-class' || type === 'functional-with-props')) {
   logError(`Sorry, ${type} not available for typescript.`)
   process.exit(0);
 }
@@ -85,7 +87,9 @@ if (!componentName) {
 
 
 // Our index template is super straightforward, so we'll just inline it for now.
-const indexTemplate = prettify(`\
+const indexTemplate = prettify(isTS ? `\
+export * from './${componentName}';
+` : `\
 export { ${componentName} } from './${componentName}';
 `);
 
